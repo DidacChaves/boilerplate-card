@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.0...v1.0.1) (2025-01-23)
+
+
+### Bug Fixes
+
+* **card:** update entity config and show in card ([c7d1b78](https://github.com/DidacChaves/boilerplate-card/commit/c7d1b787371575d1ff902b68d8ee608cb6756cac))
+
 ## 1.0.0 (2025-01-23)
 
 
