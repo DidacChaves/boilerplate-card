@@ -90,6 +90,10 @@ export class BoilerplateCard extends LitElement implements LovelaceCard {
       return this._showError(localize('common.show_error'));
     }
 
+    const {  entity } = this.config;
+    const entityState = entity ? this.hass.states[entity] : undefined;
+    const stateValue = entityState ? parseFloat(entityState.state) : 0;
+
     return html`
       <ha-card
         class="with-fixed-footer "
@@ -105,8 +109,7 @@ export class BoilerplateCard extends LitElement implements LovelaceCard {
           <div class="name" title="${this.config.name}">${this.config.name}</div>
         </div>
         <div class="info">
-          <span class="value">0</span>
-        </div>
+          <span class="value">${stateValue}</div>
         <div class="footer">
         </div>
       </ha-card>

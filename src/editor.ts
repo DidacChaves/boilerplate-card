@@ -61,6 +61,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
           .hass=${this.hass}
           .selector=${{ entity: entities }}
           .value=${this._entity}
+          .configValue=${'entity'}
           name="entity"
           @value-changed=${this._valueChanged}
       ></ha-selector>

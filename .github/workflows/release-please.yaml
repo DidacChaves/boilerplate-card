@@ -25,10 +25,30 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
 
-      # Extract version from release-please output
+      # Debug release-please output
+      - name: Debug release-please output
+        run: |
+          echo "Release outputs:"
+          echo "release_created: ${{ steps.release.outputs.release_created }}"
+          ls -la
+
+      # Extract new version
       - name: Extract new version
         if: steps.release.outputs.release_created == 'true'
-        run: echo "VERSION=$(cat .release-please-manifest.json | jq -r '.[].version')" >> $GITHUB_ENV
+        run: |
+          if [ -f .release-please-manifest.json ]; then
+            VERSION=$(jq -r '.[].version' .release-please-manifest.json)
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            echo "Extracted version: $VERSION"
+          else
+            echo "Error: .release-please-manifest.json not found" >&2
+            exit 1
+          fi
+
+      # Debug: Check the VERSION environment variable
+      - name: Debug VERSION
+        if: steps.release.outputs.release_created == 'true'
+        run: echo "VERSION is ${{ env.VERSION }}"
 
       # Update version in src/const.ts
       - name: Update CARD_VERSION in src/const.ts
@@ -46,3 +66,8 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+      # Handle missing release-please output
+      - name: Handle missing release-please output
+        if: steps.release.outputs.release_created != 'true'
+        run: echo "No release created. Skipping version update."
