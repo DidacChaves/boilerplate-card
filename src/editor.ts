@@ -2,9 +2,8 @@
 import { LitElement, html, TemplateResult, css } from 'lit';
 import { HomeAssistant, fireEvent, LovelaceCardEditor } from 'custom-card-helpers';
 
-import { BoilerplateCardConfig } from './types';
+import {BoilerplateCardConfig} from './types';
 import { customElement, property, state } from 'lit/decorators.js';
-import { PluginStyles } from './styles/styles';
 
 @customElement('boilerplate-card-editor')
 export class BoilerplateCardEditor extends LitElement implements LovelaceCardEditor {
@@ -18,7 +17,6 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
 
   public setConfig(config: BoilerplateCardConfig): void {
     this._config = config;
-
     this.loadCardHelpers();
   }
 
@@ -59,17 +57,13 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     const entities = Object.keys(this.hass.states);
 
     return html`
-      <ha-select
-        .hass=${this.hass}
-        label="Entity (Required)"
-        .value=${this._entity}
-        .configValue=${'entity'}
-        required="true"
-        @change=${this._valueChanged}
-        @closed=${(ev) => ev.stopPropagation()}
-      >
-        ${entities.map((entity) => html` <mwc-list-item .value=${entity}>${entity}</mwc-list-item> `)}
-      </ha-select>
+      <ha-selector
+          .hass=${this.hass}
+          .selector=${{ entity: entities }}
+          .value=${this._entity}
+          name="entity"
+          @value-changed=${this._valueChanged}
+      ></ha-selector>
       <ha-area-picker
         .curValue=${this._area}
         no-add
@@ -80,26 +74,31 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         @value-changed=${this._valueChanged}
       >
       </ha-area-picker>
-      <ha-textfield
-        label="Name (Optional)"
-        .value=${this._name}
-        .configValue=${'name'}
-        @input=${this._valueChanged}
-      ></ha-textfield>
-      <ha-formfield .label=${`Toggle warning ${this._show_warning ? 'off' : 'on'}`}>
-        <ha-checkbox
-          .checked=${this._show_warning !== false}
-          .configValue=${'show_warning'}
-          @change=${this._valueChanged}
-        ></ha-checkbox>
-      </ha-formfield>
-      <ha-formfield .label=${`Toggle error ${this._show_error ? 'off' : 'on'}`}>
-        <ha-checkbox
-          .checked=${this._show_error !== false}
-          .configValue=${'show_error'}
-          @change=${this._valueChanged}
-        ></ha-checkbox>
-      </ha-formfield>
+      <ha-form-grid>
+        <ha-form-col>
+          <ha-textfield
+            label="Name (Optional)"
+            .value=${this._name}
+            .configValue=${'name'}
+            @input=${this._valueChanged}></ha-textfield>
+        </ha-form-col>
+        <ha-form-col>
+          <ha-formfield .label=${`Toggle warning`}>
+            <ha-switch
+                .checked=${this._show_warning}
+                .configValue=${'show_warning'}
+                @change=${this._valueChanged}
+            ></ha-switch>
+          </ha-formfield>
+          <ha-formfield .label= ${`Toggle error`}>
+            <ha-switch
+                .checked=${this._show_error}
+                .configValue=${'show_error'}
+                @change=${this._valueChanged}
+            ></ha-switch>
+          </ha-formfield>
+        </ha-form-col>
+      </ha-form-grid>
     `;
   }
 
@@ -139,12 +138,16 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
 
   static get styles() {
     return [
-      PluginStyles,
       css`
-        ha-select,
-        mwc-select,
-        mwc-textfield {
-          margin-bottom: 16px;
+        ha-form-grid {
+          grid-template-columns: repeat(var(--form-grid-column-count, auto-fit), minmax(var(--form-grid-min-width, 200px), 1fr));
+          gap: 24px 8px;
+          display: grid !important;
+        }
+        ha-selector,
+        ha-area-picker,
+        ha-formfield {
+          margin-bottom: 24px;
           display: block;
         }
         mwc-formfield {

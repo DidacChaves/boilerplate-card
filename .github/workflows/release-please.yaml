@@ -1,0 +1,48 @@
+name: Release please
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Run release-please to generate release
+      - name: Run release-please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          release-type: node
+
+      # Extract version from release-please output
+      - name: Extract new version
+        if: steps.release.outputs.release_created == 'true'
+        run: echo "VERSION=$(cat .release-please-manifest.json | jq -r '.[].version')" >> $GITHUB_ENV
+
+      # Update version in src/const.ts
+      - name: Update CARD_VERSION in src/const.ts
+        if: steps.release.outputs.release_created == 'true'
+        run: |
+          sed -i "s/export const CARD_VERSION = '.*';/export const CARD_VERSION = '${{ env.VERSION }}';/" src/const.ts
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/const.ts
+          git commit -m "chore: update CARD_VERSION to ${{ env.VERSION }}"
+
+      # Push updated file
+      - name: Push changes
+        if: steps.release.outputs.release_created == 'true'
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
