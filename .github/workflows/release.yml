@@ -15,8 +15,8 @@ jobs:
       - name: Build the file
         run: |
           cd /home/runner/work/boilerplate-card/boilerplate-card
-          yarn install
-          yarn build
+          npm install
+          npm run build
 
       # Upload build file to the releas as an asset.
       - name: Upload zip to release

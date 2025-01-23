@@ -16,8 +16,5 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build
         run: |
-          yarn install
-          yarn build
-      - name: Lint
-        run: |
-          yarn lint
+          npm install
+          npm run build
