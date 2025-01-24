@@ -29,5 +29,5 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Release
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: npx semantic-release
