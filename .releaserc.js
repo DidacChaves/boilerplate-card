@@ -1,6 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
 module.exports = {
-  repositoryUrl: 'https://github.com/DidacChaves/boilerplate-card.git',
   plugins: [
     '@semantic-release/commit-analyzer',
     [

@@ -52,12 +52,11 @@
     "lovelace",
     "custom-cards"
   ],
-  "module": "boilerplate-card.js",
-  "repository": "git@github.com:DidacChaves/boilerplate-card.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DidacChaves/boilerplate-card.git"
+  },
   "author": "Didac Chaves <didacchaves@gmail.com>",
   "license": "MIT",
-  "resolutions": {
-    "lit": "2.8.0",
-    "@lit/reactive-element": "1.6.3"
-  }
+  "homepage": "https://github.com/DidacChaves/boilerplate-card#readme"
 }
