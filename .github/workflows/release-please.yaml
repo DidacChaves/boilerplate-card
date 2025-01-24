@@ -1,4 +1,4 @@
-name: Release please
+name: Release Please
 
 on:
   push:
@@ -13,11 +13,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Run release-please to generate release
+      # Step 1: Run release-please to create or update the release
       - name: Run release-please
         id: release
         uses: googleapis/release-please-action@v4
@@ -25,49 +21,25 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
 
-      # Debug release-please output
-      - name: Debug release-please output
-        run: |
-          echo "Release outputs:"
-          echo "release_created: ${{ steps.release.outputs.release_created }}"
-          ls -la
+      # Step 2: Get the latest release version from the generated tag
+      - name: Get release version
+        run: echo "RELEASE_VERSION=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
-      # Extract new version
-      - name: Extract new version
-        if: steps.release.outputs.release_created == 'true'
+      # Step 3: Update src/const.ts with the release version
+      - name: Update src/const.ts
         run: |
-          if [ -f .release-please-manifest.json ]; then
-            VERSION=$(jq -r '.[].version' .release-please-manifest.json)
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
-            echo "Extracted version: $VERSION"
-          else
-            echo "Error: .release-please-manifest.json not found" >&2
-            exit 1
-          fi
+          echo "Updating src/const.ts with version $RELEASE_VERSION"
+          sed -i "s/export const CARD_VERSION = '';/export const CARD_VERSION = '$RELEASE_VERSION';/" src/const.ts
 
-      # Debug: Check the VERSION environment variable
-      - name: Debug VERSION
-        if: steps.release.outputs.release_created == 'true'
-        run: echo "VERSION is ${{ env.VERSION }}"
-
-      # Update version in src/const.ts
-      - name: Update CARD_VERSION in src/const.ts
-        if: steps.release.outputs.release_created == 'true'
+      # Step 4: Commit and push the updated src/const.ts file
+      - name: Commit updated const.ts
         run: |
-          sed -i "s/export const CARD_VERSION = '.*';/export const CARD_VERSION = '${{ env.VERSION }}';/" src/const.ts
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/const.ts
-          git commit -m "chore: update CARD_VERSION to ${{ env.VERSION }}"
-
-      # Push updated file
-      - name: Push changes
-        if: steps.release.outputs.release_created == 'true'
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-
-      # Handle missing release-please output
-      - name: Handle missing release-please output
-        if: steps.release.outputs.release_created != 'true'
-        run: echo "No release created. Skipping version update."
+          git commit -m "chore: update CARD_VERSION to $RELEASE_VERSION"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
