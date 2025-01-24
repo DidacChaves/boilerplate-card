@@ -53,6 +53,5 @@
   "resolutions": {
     "lit": "2.8.0",
     "@lit/reactive-element": "1.6.3"
-  },
-  "packageManager": "yarn@4.2.2"
+  }
 }
