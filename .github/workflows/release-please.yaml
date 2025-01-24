@@ -12,6 +12,7 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    if: "!contains(github.ref, 'release-please--')"
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
