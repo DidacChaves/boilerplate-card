@@ -13,7 +13,11 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Run release-please to create or update the release
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Run release-please to create or update the release
       - name: Run release-please
         id: release
         uses: googleapis/release-please-action@v4
@@ -21,19 +25,19 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
 
-      # Step 2: Get the latest release version from the generated tag
+      # Step 3: Get the latest release version from the generated tag
       - name: Get release version
         run: echo "RELEASE_VERSION=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
-      # Step 3: Update src/const.ts with the release version
+      # Step 4: Update src/const.ts with the release version
       - name: Update src/const.ts
         run: |
           echo "Updating src/const.ts with version $RELEASE_VERSION"
           sed -i "s/export const CARD_VERSION = '';/export const CARD_VERSION = '$RELEASE_VERSION';/" src/const.ts
 
-      # Step 4: Commit and push the updated src/const.ts file
+      # Step 5: Commit and push the updated src/const.ts file
       - name: Commit updated const.ts
         run: |
           git config user.name "github-actions[bot]"
