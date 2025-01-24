@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.3...v1.0.4) (2025-01-24)
+
+
+### Bug Fixes
+
+* **card:** update release please ([76d0900](https://github.com/DidacChaves/boilerplate-card/commit/76d0900e872bc32bd2b21c262a0e4c30cb780c5f))
+
 ## [1.0.3](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.2...v1.0.3) (2025-01-24)
 
 
