@@ -119,18 +119,20 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       return;
     }
     const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
+
+    const value = ev.detail?.value || target.value;
+    if (!target.configValue || this[`_${target.configValue}`] === value) {
       return;
     }
     if (target.configValue) {
-      if (target.value === '') {
+      if (value === '') {
         const tmpConfig = { ...this._config };
         delete tmpConfig[target.configValue];
         this._config = tmpConfig;
       } else {
         this._config = {
           ...this._config,
-          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
+          [target.configValue]: target.checked !== undefined ? target.checked : value,
         };
       }
     }

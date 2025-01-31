@@ -70,12 +70,11 @@ Note: this is available only in vscode ensure you have the [Remote Containers](h
 2. Open a [devcontainer][devcontainer] terminal and run `npm start` when it's ready.
 3. The compiled `.js` file will be accessible on
    `http://127.0.0.1:5000/boilerplate-card.js`.
-4. On a running Home Assistant installation add this to your Lovelace
-   `resources:`
+4. On a running Home Assistant installation add this to your resources on your configuation -> panels:
 
 ```yaml
-- url: 'http://127.0.0.1:5000/boilerplate-card.js'
-  type: module
+- url: 'http://127.0.0.1:5000/rainfall-tracker-card.js'
+  type: module javascript
 ```
 
 _Change "127.0.0.1" to the IP of your development machine._
