@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.8...v1.1.0) (2025-01-31)
+
+### Features
+
+* update state handling and modify README instructions (issue [#123](https://github.com/DidacChaves/boilerplate-card/issues/123)) ([ec6aa33](https://github.com/DidacChaves/boilerplate-card/commit/ec6aa336a3bb5cc8fead455b492150914cbb08f0))
+
 ## [1.0.8](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.7...v1.0.8) (2025-01-25)
 
 ### Bug Fixes
