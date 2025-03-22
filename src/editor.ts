@@ -120,10 +120,15 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     }
     const target = ev.target;
 
-    const value = ev.detail?.value || target.value;
-    if (!target.configValue || this[`_${target.configValue}`] === value) {
+    let value = ev.detail?.value || target.value;
+    if (!target.configValue) {
       return;
     }
+
+    if (value === this[`_${target.configValue}`]) {
+      value = ''; // Forzar el valor a null
+    }
+
     if (target.configValue) {
       if (value === '') {
         const tmpConfig = { ...this._config };
