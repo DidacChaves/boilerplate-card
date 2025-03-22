@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/DidacChaves/boilerplate-card/compare/v1.1.0...v1.1.1) (2025-03-22)
+
+### Bug Fixes
+
+* **editor:** handle empty values for config inputs (issue [#123](https://github.com/DidacChaves/boilerplate-card/issues/123)) ([dad8b5c](https://github.com/DidacChaves/boilerplate-card/commit/dad8b5cdbf5b341889079dcfb049ce43668094f7))
+
 ## [1.1.0](https://github.com/DidacChaves/boilerplate-card/compare/v1.0.8...v1.1.0) (2025-01-31)
 
 ### Features
